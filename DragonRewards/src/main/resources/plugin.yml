@@ -1,0 +1,6 @@
+name: DragonRewards
+version: 1.0.0
+main: com.smp.dragonrewards.DragonRewards
+api-version: "1.21"
+description: Recompenses epiques pour la victoire contre l'Ender Dragon
+author: SMP Custom
