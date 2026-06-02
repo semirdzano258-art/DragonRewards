@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -140,7 +139,6 @@ public class DragonListener implements Listener {
                 p.sendMessage("\u00a75\u00a7l\u2605 GUERRIER TRANSCENDANT \u00a7r\u00a75\u00a7l\u2605");
                 p.sendMessage("\u00a77Vous avez recu :");
                 p.sendMessage("\u00a7d  \u25b8 +2 coeurs violets permanents");
-                p.sendMessage("\u00a7d  \u25b8 Aura violette permanente");
                 p.sendMessage("\u00a7d  \u25b8 Un oeuf de dragon");
             } else {
                 p.sendMessage("\u00a75Vous avez deja recu les recompenses du Dragon !");
@@ -153,59 +151,5 @@ public class DragonListener implements Listener {
             p.getWorld().playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 2.0f, 0.8f);
             p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0f, 1.0f);
         }
-
-        startPermanentAura(players);
-    }
-
-    private void startPermanentAura(List<Player> rewardedNow) {
-        new BukkitRunnable() {
-            double angle = 0;
-            double waveOffset = 0;
-
-            @Override
-            public void run() {
-                angle += 8;
-                waveOffset += 0.12;
-
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!plugin.hasBeenRewarded(p.getUniqueId())) continue;
-                    spawnVoidBreathAura(p, angle, waveOffset);
-                }
-            }
-
-            private void spawnVoidBreathAura(Player p, double angle, double waveOffset) {
-                org.bukkit.Location loc = p.getLocation().clone().add(0, 0.5, 0);
-
-                for (int spiral = 0; spiral < 2; spiral++) {
-                    double spiralOffset = spiral * Math.PI;
-                    for (int i = 0; i < 8; i++) {
-                        double t = i / 8.0;
-                        double rad = Math.toRadians(angle * 1.3) + spiralOffset + t * Math.PI * 2;
-                        double radius = 0.6 + Math.sin(waveOffset + t * Math.PI * 3) * 0.3;
-                        double height = t * 1.7 + Math.sin(waveOffset * 0.8 + t * Math.PI) * 0.15;
-                        double x = Math.cos(rad) * radius;
-                        double z = Math.sin(rad) * radius;
-                        p.getWorld().spawnParticle(Particle.DRAGON_BREATH,
-                            loc.clone().add(x, height, z), 1, 0, 0, 0, 0);
-                    }
-                }
-
-                for (int i = 0; i < 5; i++) {
-                    double rad = Math.toRadians(-angle + i * 72);
-                    double x = Math.cos(rad) * 1.1;
-                    double z = Math.sin(rad) * 1.1;
-                    p.getWorld().spawnParticle(Particle.END_ROD,
-                        loc.clone().add(x, 0.8, z), 1, 0.01, 0.02, 0.01, 0.015);
-                }
-
-                for (int i = 0; i < 4; i++) {
-                    double rad = Math.toRadians(angle * 0.6 + i * 90);
-                    double x = Math.cos(rad) * 0.9;
-                    double z = Math.sin(rad) * 0.9;
-                    p.getWorld().spawnParticle(Particle.REVERSE_PORTAL,
-                        p.getLocation().clone().add(x, 0.1, z), 1, 0, 0, 0, 0.01);
-                }
-            }
-        }.runTaskTimer(plugin, 0L, 2L);
     }
 }
