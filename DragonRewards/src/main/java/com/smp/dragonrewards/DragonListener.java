@@ -65,7 +65,8 @@ public class DragonListener implements Listener {
                 }
 
                 if (ticks % 20 == 0) {
-                    world.spawnParticle(Particle.EXPLOSION, loc.clone().add(0, 3, 0), 5, 3, 3, 3, 0);
+                    // Correction : EXPLOSION remplacé par EXPLODE qui ne nécessite pas de Float
+                    world.spawnParticle(Particle.EXPLODE, loc.clone().add(0, 3, 0), 5, 3, 3, 3, 0);
                     world.spawnParticle(Particle.TOTEM_OF_UNDYING, loc, 50, 5, 5, 5, 0.3);
                     world.playSound(loc, Sound.ENTITY_ENDER_DRAGON_GROWL, 2.0f, 0.5f);
                 }
